@@ -19,7 +19,8 @@ class ProductItem extends StatelessWidget {
             fit: BoxFit.cover,
           ),
           onTap: () {
-            Navigator.pushNamed(context, ProductDetailScreen.routeName);
+            Navigator.pushNamed(context, ProductDetailScreen.routeName,
+                arguments: id);
           },
         ),
         footer: GridTileBar(
