@@ -4,9 +4,13 @@ import 'package:shopathy/provider/products_provider.dart';
 import 'package:shopathy/widgets/product_item.dart';
 
 class ProductGrid extends StatelessWidget {
+  final bool showFavourite;
+  ProductGrid(this.showFavourite);
   @override
   Widget build(BuildContext context) {
-    final loadedProduct = Provider.of<Products>(context).items;
+    final loadedProduct = Provider.of<Products>(context);
+    final products =
+        showFavourite ? loadedProduct.favourites : loadedProduct.items;
     return GridView.builder(
         padding: EdgeInsets.all(10.0),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -14,11 +18,10 @@ class ProductGrid extends StatelessWidget {
             mainAxisSpacing: 10,
             crossAxisSpacing: 10,
             childAspectRatio: 3 / 2),
-        itemCount: loadedProduct.length,
-        itemBuilder: (ctx, index) => ProductItem(
-              id: loadedProduct[index].id,
-              title: loadedProduct[index].title,
-              imageUrl: loadedProduct[index].imageURL,
+        itemCount: products.length,
+        itemBuilder: (ctx, index) => ChangeNotifierProvider.value(
+              value: products[index],
+              child: ProductItem(),
             ));
   }
 }

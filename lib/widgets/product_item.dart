@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:shopathy/models/product.dart';
+import 'package:shopathy/provider/cart_provider.dart';
 import 'package:shopathy/screen/product_detail_screen.dart';
 
 class ProductItem extends StatelessWidget {
-  String imageUrl;
-  String title;
-  String id;
-  ProductItem({this.id, this.imageUrl, this.title});
   @override
   Widget build(BuildContext context) {
+    final selectedProduct = Provider.of<Product>(context, listen: false);
+    final cart = Provider.of<Cart>(context, listen: false);
     return ClipRRect(
       borderRadius: BorderRadius.only(
           bottomRight: Radius.circular(10.0),
@@ -15,31 +16,42 @@ class ProductItem extends StatelessWidget {
       child: GridTile(
         child: GestureDetector(
           child: Image.network(
-            imageUrl,
+            selectedProduct.imageURL,
             fit: BoxFit.cover,
           ),
           onTap: () {
             Navigator.pushNamed(context, ProductDetailScreen.routeName,
-                arguments: id);
+                arguments: selectedProduct.id);
           },
         ),
         footer: GridTileBar(
           //backgroundColor: Colors.orange.withOpacity(0.7),
           backgroundColor: Colors.black87,
           title: Text(
-            title,
+            selectedProduct.title,
             textAlign: TextAlign.center,
           ),
-          leading: IconButton(
-            icon: Icon(Icons.favorite),
-            onPressed: () {},
-            color: Theme.of(context).accentColor,
+          leading: Consumer<Product>(
+            builder: (ctx, builder, _) {
+              return IconButton(
+                icon: Icon(selectedProduct.isFavourite
+                    ? Icons.favorite
+                    : Icons.favorite_border),
+                onPressed: () {
+                  selectedProduct.toggleIsFavourite();
+                },
+                color: Theme.of(context).accentColor,
+              );
+            },
           ),
           trailing: IconButton(
             icon: Icon(
               Icons.shopping_cart,
             ),
-            onPressed: () {},
+            onPressed: () {
+              cart.addItem(selectedProduct.id, selectedProduct.price,
+                  selectedProduct.title);
+            },
             color: Theme.of(context).accentColor,
           ),
         ),
