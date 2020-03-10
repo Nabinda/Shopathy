@@ -15,9 +15,12 @@ class ProductItem extends StatelessWidget {
           bottomLeft: Radius.circular(10.0)),
       child: GridTile(
         child: GestureDetector(
-          child: Image.network(
-            selectedProduct.imageURL,
-            fit: BoxFit.cover,
+          child: Hero(
+            tag: 'product${selectedProduct.id}',
+            child: Image.network(
+              selectedProduct.imageURL,
+              fit: BoxFit.cover,
+            ),
           ),
           onTap: () {
             Navigator.pushNamed(context, ProductDetailScreen.routeName,

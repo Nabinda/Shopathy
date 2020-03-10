@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopathy/provider/cart_provider.dart';
 import 'package:shopathy/provider/products_provider.dart';
+import 'package:shopathy/screen/cart_screen.dart';
 import 'package:shopathy/screen/product_detail_screen.dart';
 import 'package:shopathy/screen/product_overview_screen.dart';
 
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
         home: ProductOverviewScreen(),
         routes: {
           ProductDetailScreen.routeName: (ctx) => ProductDetailScreen(),
+          CartScreen.routeName: (ctx) => CartScreen(),
         },
       ),
     );
