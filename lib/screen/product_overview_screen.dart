@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopathy/provider/cart_provider.dart';
 import 'package:shopathy/screen/cart_screen.dart';
+import 'package:shopathy/widgets/app_drawer.dart';
 import 'package:shopathy/widgets/badge.dart';
 import 'package:shopathy/widgets/product_grid.dart';
 
@@ -60,6 +61,7 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
           )
         ],
       ),
+      drawer: AppDrawer(),
       body: ProductGrid(showFavourites),
     );
   }

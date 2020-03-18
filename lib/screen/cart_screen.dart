@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopathy/provider/cart_provider.dart' show Cart;
+import 'package:shopathy/provider/order_provider.dart';
+import 'package:shopathy/screen/order_screen.dart';
 import 'package:shopathy/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {
@@ -8,6 +10,7 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = Provider.of<Cart>(context);
+    final order = Provider.of<Orders>(context, listen: false);
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Cart"),
@@ -35,6 +38,12 @@ class CartScreen extends StatelessWidget {
                     ),
                   ),
                   FlatButton(
+                    onPressed: () {
+                      order.addOrder(
+                          cart.items.values.toList(), cart.totalAmount);
+                      cart.clearCart();
+//                      Navigator.pushNamed(context, OrderScreen.routeName);
+                    },
                     child: Text(
                       "Order Now",
                       style: TextStyle(
