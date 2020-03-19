@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shopathy/screen/order_screen.dart';
 import 'package:shopathy/screen/product_overview_screen.dart';
+import 'package:shopathy/screen/user_product_screen.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -29,7 +30,16 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.pushReplacementNamed(context, OrderScreen.routeName);
             },
-          )
+          ),
+          Divider(),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: Text('ManageProducts'),
+            onTap: () {
+              Navigator.pushReplacementNamed(
+                  context, UserProductScreen.routeName);
+            },
+          ),
         ],
       ),
     );
