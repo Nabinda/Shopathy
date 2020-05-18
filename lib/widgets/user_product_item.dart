@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:shopathy/screen/edit_product_screen.dart';
 
 class UserProductItem extends StatelessWidget {
   final String title;
   final String imageURL;
+  final String id;
 
-  UserProductItem(this.title, this.imageURL);
+  UserProductItem(this.title, this.imageURL, this.id);
   @override
   Widget build(BuildContext context) {
     return ListTile(
@@ -19,10 +21,13 @@ class UserProductItem extends StatelessWidget {
             IconButton(
               color: Theme.of(context).accentColor,
               icon: Icon(Icons.edit),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pushNamed(context, EditProductScreen.routeName,
+                    arguments: id);
+              },
             ),
             IconButton(
-              color: Theme.of(context).accentColor,
+              color: Theme.of(context).errorColor,
               icon: Icon(Icons.delete),
               onPressed: () {},
             )

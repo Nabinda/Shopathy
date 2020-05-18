@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopathy/provider/cart_provider.dart' show Cart;
 import 'package:shopathy/provider/order_provider.dart';
-import 'package:shopathy/screen/order_screen.dart';
 import 'package:shopathy/widgets/cart_item.dart';
 
 class CartScreen extends StatelessWidget {

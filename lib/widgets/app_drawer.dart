@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shopathy/screen/order_screen.dart';
-import 'package:shopathy/screen/product_overview_screen.dart';
 import 'package:shopathy/screen/user_product_screen.dart';
 
 class AppDrawer extends StatelessWidget {

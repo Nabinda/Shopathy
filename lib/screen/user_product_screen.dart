@@ -24,13 +24,11 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: Padding(
+      body: ListView.builder(
         padding: const EdgeInsets.all(8.0),
-        child: ListView.builder(
-          itemBuilder: (ctx, index) =>
-              UserProductItem(products[index].title, products[index].imageURL),
-          itemCount: products.length,
-        ),
+        itemBuilder: (ctx, index) => UserProductItem(products[index].title,
+            products[index].imageURL, products[index].id),
+        itemCount: products.length,
       ),
     );
   }
