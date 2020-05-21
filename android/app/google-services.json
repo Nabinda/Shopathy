@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "507100577056",
+    "firebase_url": "https://shopathy.firebaseio.com",
+    "project_id": "shopathy",
+    "storage_bucket": "shopathy.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:507100577056:android:12ac9834aa467c74db2b45",
+        "android_client_info": {
+          "package_name": "np.com.nabin.shopathy"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "507100577056-1odrtn70ck2nskpv4t20ia502kn8f7jh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC8Ys8JBRdA-sGTpySUSt0XUR-0uYESLkA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "507100577056-1odrtn70ck2nskpv4t20ia502kn8f7jh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

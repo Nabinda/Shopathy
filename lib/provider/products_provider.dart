@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shopathy/models/product.dart';
+import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
   List<Product> _items = [
@@ -58,16 +61,35 @@ class Products with ChangeNotifier {
   }
 
   //this functions add new product
-  void addProduct(Product product) {
-    final newProduct = Product(
-        id: DateTime.now().toString(),
-        title: product.title,
-        price: product.price,
-        description: product.description,
-        imageURL: product.imageURL);
+  Future<void> addProduct(Product product) async {
+    const url = "https://shopathy.firebaseio.com/products.json";
+    try {
+      final response = await http.post(url,
+          body: json.encode({
+            'title': product.title,
+            'price': product.price,
+            'description': product.description,
+            'imageURL': product.imageURL,
+            'isFavourite': product.isFavourite,
+          }));
+      //the future gives response after posting to the database
 
-    _items.add(newProduct);
-    notifyListeners();
+      print(json.decode(response.body)['name']);
+      final newProduct = Product(
+          id: json.decode(response.body)['name'],
+          title: product.title,
+          price: product.price,
+          description: product.description,
+          imageURL: product.imageURL);
+
+      _items.add(newProduct);
+      notifyListeners();
+    }
+    //if any error occurs during post we catch and execute accordingly
+    catch (error) {
+      print(error);
+      throw (error);
+    }
   }
 
 //this function updates the current product
@@ -77,5 +99,11 @@ class Products with ChangeNotifier {
       _items[prodIndex] = upProduct;
       notifyListeners();
     }
+  }
+
+//this function deletes the product
+  void deleteProduct(String id) {
+    _items.removeWhere((prod) => prod.id == id);
+    notifyListeners();
   }
 }
