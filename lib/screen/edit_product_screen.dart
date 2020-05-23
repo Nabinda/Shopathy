@@ -43,7 +43,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
     if (_isInit) {
       final String productId = ModalRoute.of(context).settings.arguments;
       if (productId != null) {
-        _editedProduct = Provider.of<Products>(context).findById(productId);
+        _editedProduct =
+            Provider.of<Products>(context, listen: false).findById(productId);
         initValues = {
           "title": _editedProduct.title,
           "price": _editedProduct.price.toString(),
@@ -93,9 +94,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
         await showDialog(
             context: context,
             builder: (ctx) => AlertDialog(
-                  title: Text("Error Occured"),
+                  title: Text("Error Occurred"),
                   content:
-                      Text("Something has occured! Product couldn't be added"),
+                      Text("Something has occurred! Product couldn't be added"),
                   actions: <Widget>[
                     FlatButton(
                       child: Text("OK"),

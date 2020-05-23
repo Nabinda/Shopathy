@@ -7,9 +7,13 @@ import 'package:shopathy/widgets/user_product_item.dart';
 
 class UserProductScreen extends StatelessWidget {
   static const routeName = "/user_product_screen";
+  Future<void> _refreshProducts(BuildContext context) async {
+    await Provider.of<Products>(context, listen: false).fetchAndSetProduct();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final products = Provider.of<Products>(context).items;
+    final products = Provider.of<Products>(context);
     return Scaffold(
       appBar: AppBar(
         title: Text("Your Products"),
@@ -24,11 +28,16 @@ class UserProductScreen extends StatelessWidget {
         ],
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        padding: const EdgeInsets.all(8.0),
-        itemBuilder: (ctx, index) => UserProductItem(products[index].title,
-            products[index].imageURL, products[index].id),
-        itemCount: products.length,
+      body: RefreshIndicator(
+        onRefresh: () => _refreshProducts(context),
+        child: ListView.builder(
+          padding: const EdgeInsets.all(8.0),
+          itemBuilder: (ctx, index) => UserProductItem(
+              products.items[index].title,
+              products.items[index].imageURL,
+              products.items[index].id),
+          itemCount: products.items.length,
+        ),
       ),
     );
   }
