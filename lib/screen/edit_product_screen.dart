@@ -84,12 +84,9 @@ class _EditProductScreenState extends State<EditProductScreen> {
       _isLoading = true;
     });
     if (_editedProduct.id != null) {
-      Provider.of<Products>(context, listen: false)
-          .updateProduct(_editedProduct.id, _editedProduct);
-    } else {
       try {
         await Provider.of<Products>(context, listen: false)
-            .addProduct(_editedProduct);
+            .updateProduct(_editedProduct.id, _editedProduct);
       } catch (error) {
         await showDialog(
             context: context,
@@ -106,13 +103,33 @@ class _EditProductScreenState extends State<EditProductScreen> {
                     )
                   ],
                 ));
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-        Navigator.pop(context);
+      }
+    } else {
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
+            context: context,
+            builder: (ctx) => AlertDialog(
+                  title: Text("Error Occurred"),
+                  content: Text(
+                      "Something has occurred! Product couldn't be edited"),
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text("OK"),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                ));
       }
     }
+    setState(() {
+      _isLoading = false;
+    });
+    Navigator.pop(context);
   }
 
   @override

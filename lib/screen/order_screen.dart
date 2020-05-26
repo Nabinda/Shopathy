@@ -14,9 +14,27 @@ class OrderScreen extends StatelessWidget {
         title: Text("Your Orders"),
       ),
       drawer: AppDrawer(),
-      body: ListView.builder(
-        itemBuilder: (ctx, i) => OrderItem(orderData[i]),
-        itemCount: orderData.length,
+      body: FutureBuilder(
+        future: Provider.of<Orders>(context, listen: false).fetchAndSetOrder(),
+        builder: (ctx, dataSnapshot) {
+          if (dataSnapshot.connectionState == ConnectionState.waiting) {
+            return Center(
+              child: CircularProgressIndicator(),
+            );
+          } else {
+            if (dataSnapshot.error != null) {
+              return Center(
+                child: Text("Error Occurred! Something went wrong. Try Again!"),
+              );
+            } else {
+              return Consumer<Orders>(
+                  builder: (ctx, orderData, child) => ListView.builder(
+                        itemBuilder: (ctx, i) => OrderItem(orderData.orders[i]),
+                        itemCount: orderData.orders.length,
+                      ));
+            }
+          }
+        },
       ),
     );
   }
