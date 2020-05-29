@@ -19,14 +19,15 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
-
+  final String _authToken;
+  Orders(this._authToken, this._orders);
   List<OrderItem> get orders {
     return [..._orders];
   }
 
 //====adding cart items to order list=========
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = "https://shopathy.firebaseio.com/orders.json";
+    final url = "https://shopathy.firebaseio.com/orders.json?auth=$_authToken";
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -41,27 +42,27 @@ class Orders with ChangeNotifier {
                     })
                 .toList(),
           }));
+      _orders.insert(
+          0,
+          OrderItem(
+              id: DateTime.now().toString(),
+              amount: total,
+              products: cartProducts,
+              dateTime: DateTime.now()));
+      notifyListeners();
     } catch (error) {
       print(error.message);
       throw (error);
     }
-    _orders.insert(
-        0,
-        OrderItem(
-            id: DateTime.now().toString(),
-            amount: total,
-            products: cartProducts,
-            dateTime: DateTime.now()));
-    notifyListeners();
   }
 
   //fetching orders from the database
   Future<void> fetchAndSetOrder() async {
-    final url = "https://shopathy.firebaseio.com/orders.json";
+    final url = "https://shopathy.firebaseio.com/orders.json?auth=$_authToken";
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
-
+      print(extractedData.toString());
       final List<OrderItem> _loadedOrders = [];
       if (extractedData == null) {
         return;
@@ -80,6 +81,8 @@ class Orders with ChangeNotifier {
                 .toList(),
             dateTime: DateTime.parse(orderData['dateTime'])));
       });
+      _orders = _loadedOrders;
+      notifyListeners();
     } catch (error) {
       throw (error);
     }

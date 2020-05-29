@@ -73,6 +73,17 @@ class _OrderButtonState extends State<OrderButton> {
   Widget build(BuildContext context) {
     final order = Provider.of<Orders>(context, listen: false);
     return FlatButton(
+      child: _isLoading
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
+          : Text(
+              "Order Now",
+              style: TextStyle(
+                  fontSize: 20,
+                  fontFamily: 'Nunito',
+                  color: Theme.of(context).accentColor),
+            ),
       onPressed: widget.cart.totalAmount <= 0
           ? null
           : () async {
@@ -85,19 +96,7 @@ class _OrderButtonState extends State<OrderButton> {
               setState(() {
                 _isLoading = false;
               });
-//                      Navigator.pushNamed(context, OrderScreen.routeName);
             },
-      child: _isLoading
-          ? Center(
-              child: CircularProgressIndicator(),
-            )
-          : Text(
-              "Order Now",
-              style: TextStyle(
-                  fontSize: 20,
-                  fontFamily: 'Nunito',
-                  color: Theme.of(context).accentColor),
-            ),
     );
   }
 }

@@ -6,6 +6,8 @@ import 'package:shopathy/models/product.dart';
 import 'package:http/http.dart' as http;
 
 class Products with ChangeNotifier {
+  final String authToken;
+  final String userId;
   List<Product> _items = [
 //    Product(
 //        id: "1",
@@ -48,7 +50,7 @@ class Products with ChangeNotifier {
 //            "https://www.starmac.co.ke/wp-content/uploads/2019/08/samsung-65-inch-ultra-4k-curved-tv-ua65ku7350k-series-7.jpg",
 //        isFavourite: false)
   ];
-
+  Products(this.authToken, this.userId, this._items);
   List<Product> get items {
     return [..._items];
   }
@@ -63,7 +65,7 @@ class Products with ChangeNotifier {
 
   //this functions add new product
   Future<void> addProduct(Product product) async {
-    const url = "https://shopathy.firebaseio.com/products.json";
+    final url = "https://shopathy.firebaseio.com/products.json?auth=$authToken";
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -95,19 +97,24 @@ class Products with ChangeNotifier {
 
   //this function fetches the product from firebase
   Future<void> fetchAndSetProduct() async {
-    const url = "https://shopathy.firebaseio.com/products.json";
+    final url = "https://shopathy.firebaseio.com/products.json?auth=$authToken";
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
+      final favouriteResponse = await http.get(
+          "https://shopathy.firebaseio.com/userFavourites/$userId.json?auth=$authToken");
+      final favouriteData = json.decode(favouriteResponse.body);
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
-            id: prodId,
-            title: prodData['title'],
-            description: prodData['description'],
-            price: double.parse(prodData['price'].toString()),
-            imageURL: prodData['imageURL'],
-            isFavourite: prodData['isFavourite']));
+          id: prodId,
+          title: prodData['title'],
+          description: prodData['description'],
+          price: double.parse(prodData['price'].toString()),
+          imageURL: prodData['imageURL'],
+          isFavourite:
+              favouriteData == null ? false : favouriteData[prodId] ?? false,
+        ));
       });
       _items = loadedProducts;
       notifyListeners();
@@ -122,7 +129,8 @@ class Products with ChangeNotifier {
     final prodIndex = _items.indexWhere((prod) => prod.id == id);
     try {
       if (prodIndex >= 0) {
-        final url = "https://shopathy.firebaseio.com/products/$id.json";
+        final url =
+            "https://shopathy.firebaseio.com/products/$id.json?auth=$authToken";
         await http.patch(url,
             body: json.encode({
               'title': upProduct.title,
@@ -142,7 +150,8 @@ class Products with ChangeNotifier {
 
 //this function deletes the product
   Future<void> deleteProduct(String id) async {
-    final url = "https://shopathy.firebaseio.com/products/$id.json";
+    final url =
+        "https://shopathy.firebaseio.com/products/$id.json?auth=$authToken";
     final existingProductIndex = items.indexWhere((prod) => prod.id == id);
     var existingProduct = _items[existingProductIndex];
 
