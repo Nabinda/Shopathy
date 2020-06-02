@@ -74,6 +74,7 @@ class Products with ChangeNotifier {
             'description': product.description,
             'imageURL': product.imageURL,
             'isFavourite': product.isFavourite,
+            'creatorId': userId
           }));
       //the future gives response after posting to the database
 
@@ -96,8 +97,11 @@ class Products with ChangeNotifier {
   }
 
   //this function fetches the product from firebase
-  Future<void> fetchAndSetProduct() async {
-    final url = "https://shopathy.firebaseio.com/products.json?auth=$authToken";
+  Future<void> fetchAndSetProduct([bool filterUser = false]) async {
+    final filterString =
+        filterUser ? 'orderBy="creatorId"&equalTo="$userId"' : "";
+    final url =
+        "https://shopathy.firebaseio.com/products.json?auth=$authToken&$filterString";
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;

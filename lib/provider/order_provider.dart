@@ -19,15 +19,22 @@ class OrderItem {
 
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
+
+  final String _userId;
   final String _authToken;
-  Orders(this._authToken, this._orders);
+  Orders(
+    this._authToken,
+    this._userId,
+    this._orders,
+  );
   List<OrderItem> get orders {
     return [..._orders];
   }
 
 //====adding cart items to order list=========
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
-    final url = "https://shopathy.firebaseio.com/orders.json?auth=$_authToken";
+    final url =
+        "https://shopathy.firebaseio.com/orders/$_userId.json?auth=$_authToken";
     try {
       final response = await http.post(url,
           body: json.encode({
@@ -58,7 +65,8 @@ class Orders with ChangeNotifier {
 
   //fetching orders from the database
   Future<void> fetchAndSetOrder() async {
-    final url = "https://shopathy.firebaseio.com/orders.json?auth=$_authToken";
+    final url =
+        "https://shopathy.firebaseio.com/orders/$_userId.json?auth=$_authToken";
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
@@ -81,7 +89,7 @@ class Orders with ChangeNotifier {
                 .toList(),
             dateTime: DateTime.parse(orderData['dateTime'])));
       });
-      _orders = _loadedOrders;
+      _orders = _loadedOrders.reversed.toList();
       notifyListeners();
     } catch (error) {
       throw (error);
