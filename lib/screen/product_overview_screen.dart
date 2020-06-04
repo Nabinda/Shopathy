@@ -28,7 +28,9 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<Products>(context).fetchAndSetProduct().then((_) {
+      Provider.of<Products>(context, listen: false)
+          .fetchAndSetProduct()
+          .then((_) {
         setState(() {
           _isLoading = false;
         });

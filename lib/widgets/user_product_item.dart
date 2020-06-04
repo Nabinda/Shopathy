@@ -9,8 +9,12 @@ class UserProductItem extends StatelessWidget {
   final String id;
 
   UserProductItem(this.title, this.imageURL, this.id);
+
   @override
   Widget build(BuildContext context) {
+    print("Title" + title);
+    print(imageURL);
+    print(id);
     return ListTile(
       title: Text(title),
       leading: CircleAvatar(

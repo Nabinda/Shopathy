@@ -105,6 +105,7 @@ class Products with ChangeNotifier {
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData.toString());
       final List<Product> loadedProducts = [];
       final favouriteResponse = await http.get(
           "https://shopathy.firebaseio.com/userFavourites/$userId.json?auth=$authToken");
@@ -123,7 +124,6 @@ class Products with ChangeNotifier {
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      print(error.message);
       throw (error);
     }
   }
