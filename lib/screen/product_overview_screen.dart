@@ -1,5 +1,7 @@
 //---------Initial Display Screen--------
 
+import 'dart:wasm';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shopathy/provider/cart_provider.dart';
@@ -7,11 +9,13 @@ import 'package:shopathy/provider/products_provider.dart';
 import 'package:shopathy/screen/cart_screen.dart';
 import 'package:shopathy/widgets/app_drawer.dart';
 import 'package:shopathy/widgets/badge.dart';
+import 'package:shopathy/widgets/custom_search_deligate.dart';
 import 'package:shopathy/widgets/product_grid.dart';
 
 enum FilterOptions { Favourites, All }
 
 class ProductOverviewScreen extends StatefulWidget {
+  static const routeName = "/product_overview";
   @override
   _ProductOverviewScreenState createState() => _ProductOverviewScreenState();
 }
@@ -89,6 +93,12 @@ class _ProductOverviewScreenState extends State<ProductOverviewScreen> {
               child: CircularProgressIndicator(),
             )
           : ProductGrid(showFavourites),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showSearch(context: context, delegate: CustomSearchDelegate());
+        },
+        child: Icon(Icons.search),
+      ),
     );
   }
 }

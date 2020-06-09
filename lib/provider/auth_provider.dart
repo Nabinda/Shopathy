@@ -48,6 +48,11 @@ class Auth with ChangeNotifier {
       _expiryDate = DateTime.now().add(Duration(
         seconds: int.parse(responseData['expiresIn']),
       ));
+      if (urlSegment == "signUp") {
+        final user = await addUserInfo(_token, _userId, email);
+      } else {
+        final user = await fetchUserInfo(_token, _userId);
+      }
       _autoLogout();
       notifyListeners();
       //initialize shared preferences
@@ -55,7 +60,8 @@ class Auth with ChangeNotifier {
       final userData = json.encode({
         'token': _token,
         'userId': _userId,
-        'expiryDate': _expiryDate.toIso8601String()
+        'expiryDate': _expiryDate.toIso8601String(),
+        'email': email
       });
       prefs.setString("userData", userData);
     } catch (error) {
@@ -108,5 +114,33 @@ class Auth with ChangeNotifier {
     notifyListeners();
     _autoLogout();
     return true;
+  }
+
+  Future<void> addUserInfo(
+      String authToken, String userId, String email) async {
+    final url =
+        "https://shopathy.firebaseio.com/users/$userId.json?auth=$authToken";
+    try {
+      final response = await http.put(url,
+          body: json.encode({
+            'userId': userId,
+            'email': email,
+          }));
+      print(json.decode(response.body));
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> fetchUserInfo(String authToken, String userId) async {
+    final url =
+        "https://shopathy.firebaseio.com/users/$userId.json?auth=$authToken";
+    try {
+      final response = await http.get(url);
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
+      print(extractedData.toString());
+    } catch (error) {
+      throw (error);
+    }
   }
 }

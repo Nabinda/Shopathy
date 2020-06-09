@@ -161,8 +161,9 @@ class Products with ChangeNotifier {
 
     _items.removeWhere((prod) => prod.id == id);
     notifyListeners();
-    final response = await http.delete(url);
+
     try {
+      final response = await http.delete(url);
       if (response.statusCode >= 400) {
         _items.insert(existingProductIndex, existingProduct);
         notifyListeners();
@@ -175,5 +176,14 @@ class Products with ChangeNotifier {
       notifyListeners();
       throw HttpException("Could not delete Product");
     }
+  }
+
+  //get search list
+  List<Product> getSearchItems(String query) {
+    if (query.isNotEmpty && query != null) {
+      notifyListeners();
+      return _items.where((prod) => prod.title.startsWith(query)).toList();
+    }
+    return [];
   }
 }
